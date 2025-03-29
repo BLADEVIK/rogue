@@ -11,6 +11,7 @@ class Game {
         this.playerDamage = 10;  // Начальный урон игрока
         this.isAttacking = false; // Флаг атаки игрока
         this.attackingEnemies = new Set(); // Множество атакующих врагов
+        this.tileSize = 0;      // Размер одной клетки в пикселях
     }
 
     init() {
@@ -150,7 +151,23 @@ class Game {
         }
     }
 
+    calculateTileSize() {
+        const field = document.querySelector('.field');
+        const fieldWidth = field.clientWidth;
+        const fieldHeight = field.clientHeight;
+        
+        // Вычисляем размер клетки, учитывая соотношение сторон поля
+        const widthRatio = fieldWidth / this.width;
+        const heightRatio = fieldHeight / this.height;
+        
+        // Берем меньший размер, чтобы поле помещалось полностью
+        this.tileSize = Math.min(widthRatio, heightRatio);
+    }
+
     render() {
+        // Пересчитываем размер клеток при каждом рендере
+        this.calculateTileSize();
+        
         // Отрисовка игрового поля
         const field = document.querySelector('.field');
         field.innerHTML = ''; // Очистка поля перед отрисовкой
@@ -199,9 +216,11 @@ class Game {
                     tile.appendChild(health);
                 }
 
-                // Установка позиции клетки на поле
-                tile.style.left = `${x * 50}px`;
-                tile.style.top = `${y * 50}px`;
+                // Установка позиции и размера клетки
+                tile.style.width = `${this.tileSize}px`;
+                tile.style.height = `${this.tileSize}px`;
+                tile.style.left = `${x * this.tileSize}px`;
+                tile.style.top = `${y * this.tileSize}px`;
                 field.appendChild(tile);
             }
         }
@@ -274,6 +293,12 @@ class Game {
                     if (enemy.health <= 0) {
                         this.map[targetY][targetX] = '.';
                         this.enemies = this.enemies.filter(e => e !== enemy);
+                        
+                        // Проверяем, уничтожены ли все враги
+                        if (this.enemies.length === 0) {
+                            alert('Поздравляем! Этап пройден!');
+                            location.reload();
+                        }
                     }
                 }
             }

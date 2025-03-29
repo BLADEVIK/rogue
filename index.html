@@ -16,8 +16,12 @@
 		<div class="field-box"><div class="field"></div></div>
 		<div class="cl"></div>
 		<script>
-			var game=new Game();
+			var game = new Game();
 			game.init();
+			// Обработчик изменения размера окна
+			window.addEventListener('resize', () => {
+				game.render();
+			});
 		</script>
 	</body>
 </html>
