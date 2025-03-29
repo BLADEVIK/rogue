@@ -263,6 +263,7 @@ class Game {
             this.player.health = Math.min(100, this.player.health + 30); // Восстановление здоровья
         } else if (this.map[newY][newX] === 'SW') {
             this.player.damage += 5; // Увеличение урона
+            this.player.hasSword = true; // Установка флага наличия меча
         }
 
         // Перемещение игрока
