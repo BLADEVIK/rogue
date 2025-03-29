@@ -31,6 +31,8 @@ class Game {
 
         // Генерация случайного количества комнат (от 5 до 10)
         const numRooms = Math.floor(Math.random() * 6) + 5;
+        const rooms = []; // Массив для хранения информации о комнатах
+
         for (let i = 0; i < numRooms; i++) {
             // Случайные размеры комнаты (от 3 до 8 клеток)
             const roomWidth = Math.floor(Math.random() * 6) + 3;
@@ -39,13 +41,32 @@ class Game {
             const x = Math.floor(Math.random() * (this.width - roomWidth - 1)) + 1;
             const y = Math.floor(Math.random() * (this.height - roomHeight - 1)) + 1;
             
+            // Сохраняем информацию о комнате
+            rooms.push({
+                x: x,
+                y: y,
+                width: roomWidth,
+                height: roomHeight,
+                centerX: x + Math.floor(roomWidth / 2),
+                centerY: y + Math.floor(roomHeight / 2)
+            });
+            
             this.createRoom(x, y, roomWidth, roomHeight);
         }
 
-        // Генерация коридоров (от 3 до 5)
-        const numCorridors = Math.floor(Math.random() * 3) + 3;
-        for (let i = 0; i < numCorridors; i++) {
-            this.createCorridor();
+        // Соединяем комнаты коридорами
+        for (let i = 0; i < rooms.length - 1; i++) {
+            this.connectRooms(rooms[i], rooms[i + 1]);
+        }
+
+        // Добавляем дополнительные коридоры для лучшей связности
+        const extraCorridors = Math.floor(Math.random() * 3) + 2; // 2-4 дополнительных коридора
+        for (let i = 0; i < extraCorridors; i++) {
+            const room1 = rooms[Math.floor(Math.random() * rooms.length)];
+            const room2 = rooms[Math.floor(Math.random() * rooms.length)];
+            if (room1 !== room2) {
+                this.connectRooms(room1, room2);
+            }
         }
 
         // Размещение всех игровых объектов
@@ -56,33 +77,27 @@ class Game {
         this.render();         // Первоначальная отрисовка карты
     }
 
+    connectRooms(room1, room2) {
+        // Соединение двух комнат коридором
+        const startX = room1.centerX;
+        const startY = room1.centerY;
+        const endX = room2.centerX;
+        const endY = room2.centerY;
+
+        // Сначала идем по горизонтали, потом по вертикали
+        for (let x = Math.min(startX, endX); x <= Math.max(startX, endX); x++) {
+            this.map[startY][x] = '.';
+        }
+        for (let y = Math.min(startY, endY); y <= Math.max(startY, endY); y++) {
+            this.map[y][endX] = '.';
+        }
+    }
+
     createRoom(x, y, width, height) {
         // Создание прямоугольной комнаты заданного размера
         for (let i = y; i < y + height; i++) {
             for (let j = x; j < x + width; j++) {
                 this.map[i][j] = '.'; // '.' означает пустую клетку
-            }
-        }
-    }
-
-    createCorridor() {
-        // Создание случайного коридора (горизонтального или вертикального)
-        const isHorizontal = Math.random() < 0.5;
-        if (isHorizontal) {
-            // Создание горизонтального коридора
-            const y = Math.floor(Math.random() * (this.height - 1)) + 1;
-            const startX = Math.floor(Math.random() * (this.width - 1)) + 1;
-            const length = Math.floor(Math.random() * (this.width - startX - 1)) + 1;
-            for (let x = startX; x < startX + length; x++) {
-                this.map[y][x] = '.';
-            }
-        } else {
-            // Создание вертикального коридора
-            const x = Math.floor(Math.random() * (this.width - 1)) + 1;
-            const startY = Math.floor(Math.random() * (this.height - 1)) + 1;
-            const length = Math.floor(Math.random() * (this.height - startY - 1)) + 1;
-            for (let y = startY; y < startY + length; y++) {
-                this.map[y][x] = '.';
             }
         }
     }

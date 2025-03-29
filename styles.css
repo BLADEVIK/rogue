@@ -1,0 +1,129 @@
+* { 
+    box-sizing: border-box; 
+}
+
+body, html { 
+    height: 100%; 
+}
+
+body { 
+    background-color: #000000; 
+    color: #ffffff; 
+}
+
+h1 { 
+    font-family: "Playfair Display"; 
+    font-size: 30px; 
+    padding: 10px 0px; 
+    margin: 0px; 
+}
+
+.field-box { 
+    border: 2px solid #d0d0d0; 
+    float: left; 
+}
+
+.field { 
+    position: relative; 
+    width: 1024px; 
+    height: 640px; 
+}
+
+.field .tile { 
+    position: absolute; 
+    width: 50px; 
+    height: 50px; 
+    background-size: 100%; 
+    background-image: url(images/tile-.png); 
+    z-index: 5; 
+}
+
+.field .tileW { 
+    background-image: url(images/tile-W.png); 
+}
+
+.field .tileE { 
+    background-image: url(images/tile-E.png); 
+    z-index: 10; 
+}
+
+.field .tileP { 
+    background-image: url(images/tile-P.png); 
+    z-index: 10; 
+}
+
+.field .tileHP { 
+    background-image: url(images/tile-HP.png); 
+    z-index: 9; 
+}
+
+.field .tileSW { 
+    background-image: url(images/tile-SW.png); 
+    z-index: 9; 
+}
+
+.field .tile .health { 
+    background-color: #ff0000; 
+    z-index: 11; 
+    position: absolute; 
+    left: 0px; 
+    top: 0px; 
+    height: 3px; 
+}
+
+.field .tileP .health { 
+    background-color: #00ff00; 
+    z-index: 11; 
+    position: absolute; 
+    left: 0px; 
+    top: 0px; 
+    height: 3px; 
+}
+
+.inventory-box { 
+    border: 2px solid #d0d0d0; 
+    float: left; 
+}
+
+.inventory { 
+    position: relative; 
+    width: 800px; 
+    height: 32px; 
+}
+
+.cl { 
+    clear: both; 
+    display: block; 
+}
+
+/* Анимации для атак */
+@keyframes playerAttack {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+@keyframes enemyAttack {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+.attacking {
+    animation: playerAttack 0.3s ease-in-out;
+}
+
+.enemy-attacking {
+    animation: enemyAttack 0.3s ease-in-out;
+}
+
+/* Эффект при получении урона */
+@keyframes damage {
+    0% { filter: brightness(1); }
+    50% { filter: brightness(2); }
+    100% { filter: brightness(1); }
+}
+
+.damaged {
+    animation: damage 0.3s ease-in-out;
+} 
