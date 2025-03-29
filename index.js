@@ -9,6 +9,8 @@ class Game {
         this.items = [];        // Массив предметов
         this.playerHealth = 100; // Начальное здоровье игрока
         this.playerDamage = 10;  // Начальный урон игрока
+        this.isAttacking = false; // Флаг атаки игрока
+        this.attackingEnemies = new Set(); // Множество атакующих врагов
     }
 
     init() {
@@ -153,6 +155,19 @@ class Game {
                     case 'SW': tile.classList.add('tileSW'); break; // Меч
                 }
 
+                // Добавление анимации атаки для игрока
+                if (this.map[y][x] === 'P' && this.isAttacking) {
+                    tile.classList.add('attacking');
+                }
+
+                // Добавление анимации атаки для врагов
+                if (this.map[y][x] === 'E') {
+                    const enemy = this.enemies.find(e => e.x === x && e.y === y);
+                    if (enemy && this.attackingEnemies.has(enemy)) {
+                        tile.classList.add('enemy-attacking');
+                    }
+                }
+
                 // Добавление полоски здоровья для врагов и игрока
                 if (this.map[y][x] === 'E') {
                     const enemy = this.enemies.find(e => e.x === x && e.y === y);
@@ -185,7 +200,10 @@ class Game {
                 case 's': this.movePlayer(0, 1); break;  // Вниз
                 case 'a': this.movePlayer(-1, 0); break; // Влево
                 case 'd': this.movePlayer(1, 0); break;  // Вправо
-                case ' ': this.attack(); break;          // Атака (пробел)
+                case ' ': 
+                    e.preventDefault(); // Предотвращаем прокрутку страницы
+                    this.attack(); 
+                    break;          // Атака (пробел)
             }
         });
     }
@@ -216,6 +234,13 @@ class Game {
     }
 
     attack() {
+        // Анимация атаки игрока
+        this.isAttacking = true;
+        setTimeout(() => {
+            this.isAttacking = false;
+            this.render();
+        }, 300);
+
         // Атака игрока по соседним клеткам
         const directions = [[0, 1], [1, 0], [0, -1], [-1, 0]]; // Вниз, вправо, вверх, влево
         for (const [dx, dy] of directions) {
@@ -262,6 +287,13 @@ class Game {
 
             // Атака врага по игроку, если они рядом
             if (Math.abs(enemy.x - this.player.x) <= 1 && Math.abs(enemy.y - this.player.y) <= 1) {
+                // Добавляем врага в множество атакующих
+                this.attackingEnemies.add(enemy);
+                setTimeout(() => {
+                    this.attackingEnemies.delete(enemy);
+                    this.render();
+                }, 300);
+
                 this.player.health -= enemy.damage;
                 // Проверка окончания игры
                 if (this.player.health <= 0) {

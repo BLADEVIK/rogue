@@ -28,6 +28,38 @@ h1 { font-family: "Playfair Display"; font-size: 30px; padding: 10px 0px; margin
 .inventory-box { border: 2px solid #d0d0d0; float: left; }
 .inventory { position: relative; width: 800px; height: 32px; }
 .cl { clear: both; display: block; }
+
+/* Анимации для атак */
+@keyframes playerAttack {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+@keyframes enemyAttack {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+.attacking {
+    animation: playerAttack 0.3s ease-in-out;
+}
+
+.enemy-attacking {
+    animation: enemyAttack 0.3s ease-in-out;
+}
+
+/* Эффект при получении урона */
+@keyframes damage {
+    0% { filter: brightness(1); }
+    50% { filter: brightness(2); }
+    100% { filter: brightness(1); }
+}
+
+.damaged {
+    animation: damage 0.3s ease-in-out;
+}
 </style>
 	</head>
 	<body>
@@ -38,7 +70,6 @@ h1 { font-family: "Playfair Display"; font-size: 30px; padding: 10px 0px; margin
 		<div class="inventory-box"><div class="inventory"></div></div-->
 
 		<script>
-
 			var game=new Game();
 			game.init();
 		</script>
