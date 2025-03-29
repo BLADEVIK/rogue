@@ -133,7 +133,7 @@ class Game {
             y = Math.floor(Math.random() * this.height);
         } while (this.map[y][x] !== '.');
         // Создание объекта игрока с начальными параметрами
-        this.player = { x, y, health: this.playerHealth, damage: this.playerDamage };
+        this.player = { x, y, health: this.playerHealth, damage: this.playerDamage, hasSword: false };
         this.map[y][x] = 'P'; // 'P' означает игрока
     }
 
@@ -214,6 +214,13 @@ class Game {
                     health.className = 'health';
                     health.style.width = `${this.player.health}%`;
                     tile.appendChild(health);
+
+                    // Добавление иконки меча, если он есть у игрока
+                    if (this.player.hasSword) {
+                        const swordIcon = document.createElement('div');
+                        swordIcon.className = 'sword-icon visible';
+                        tile.appendChild(swordIcon);
+                    }
                 }
 
                 // Установка позиции и размера клетки

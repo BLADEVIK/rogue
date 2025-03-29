@@ -93,6 +93,23 @@ h1 {
     height: 3px;
 }
 
+.field .tileP .sword-icon {
+    position: absolute;
+    left: 0px;
+    top: -20px;
+    width: 20px;
+    height: 20px;
+    background-image: url(images/tile-SW.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    z-index: 12;
+    display: none;
+}
+
+.field .tileP .sword-icon.visible {
+    display: block;
+}
+
 .inventory-box {
     border: 2px solid #d0d0d0;
     float: left;
